@@ -93,6 +93,10 @@ function requireAuth(req, res, next) {
 }
 
 // Routes
+app.get('/', (req, res) => {
+  res.redirect('/home');
+});
+
 app.get('/login', (req, res) => {
     res.render('login');
 });
