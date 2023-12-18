@@ -52,11 +52,15 @@
         <div class="container">
             <h1>User Profile</h1>
             <form action="#">
-                <p>E-Mail: <%= user.email %></p>
-                <p>Password: <%= user.password %></p>
-                <p>First Name: <%= user.first_name %></p>
-                <p>Last Name: <%= user.last_name %></p>
-                <p>Contact Number: <%= user.contact_no %></p>        
+                <% if (user) { %>
+                    <p>E-Mail: <%= user.email %></p>
+                    <p>Password: <%= user.password %></p>
+                    <p>First Name: <%= user.first_name %></p>
+                    <p>Last Name: <%= user.last_name %></p>
+                    <p>Contact Number: <%= user.contact_no %></p>
+                <% } else { %>
+                    <p>User information not available.</p>
+                <% } %> 
             </form>
         </div>
             <div class="container">

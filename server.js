@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const ejs = require('ejs');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 const app = express();
 const PORT = process.env.PORT || 3000
@@ -18,13 +20,6 @@ const connectDB = async () => {
       process.exit(1);
     }
   }
-
-  //Connect to the database before listening
-connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log("listening for requests");
-    })
-})
 
 
 // User Schema
@@ -41,16 +36,41 @@ const userSchema = new mongoose.Schema({
     versionKey: false
 });
 
+const store = new MongoDBStore({
+    uri: process.env.MONGO_URI,
+    collection: 'sessions',
+    connectionOptions: {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+  });
+
+store.on('error', function (error) {
+    console.error('Session Store Error:', error);
+});
+
+app.use(
+    session({
+      secret: 'subdiv',
+      resave: false,
+      saveUninitialized: false,
+      store: store,
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24,
+        // Other cookie options if needed
+      },
+    })
+  );
 
 app.use('/public/', express.static('./public'));
 app.set('view engine', 'ejs');
 
-const session = require('express-session');
 
 app.use(bodyParser.json());
 
+app.use(express.urlencoded({ extended: true }));
 app.use(session({
-    secret: 'your-secret-key',
+    secret: '070363',
     resave: false,
     saveUninitialized: true,
 }));
@@ -150,10 +170,6 @@ app.post('/register', async (req, res) => {
 
         const user = new User({ email, password, vehicle_id, rfid_id, first_name, last_name, contact_no });
         await user.save();
-
-        // Log in the new user after successful registration
-        req.session.userId = user._id;
-        req.session.user = user;
 
         res.redirect('/login');
     } catch (error) {
@@ -270,3 +286,11 @@ app.post('/delete', async (req, res) => {
         res.send('Error deleting user account');
     }
 });
+
+  //Connect to the database before listening
+  connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("listening for requests");
+    })
+})
+
