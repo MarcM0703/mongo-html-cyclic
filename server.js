@@ -68,13 +68,6 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser.json());
 
-app.use(express.urlencoded({ extended: true }));
-app.use(session({
-    secret: '070363',
-    resave: false,
-    saveUninitialized: true,
-}));
-
 
 userSchema.methods.comparePassword = function(candidatePassword) {
     return candidatePassword === this.password;
