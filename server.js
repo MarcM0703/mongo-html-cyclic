@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const ejs = require('ejs');
@@ -5,31 +6,26 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 
 const app = express();
-const port = process.env.PORT || 3000;
-app.use('/public/', express.static('./public'));
-app.set('view engine', 'ejs');
-
-const session = require('express-session');
-
-app.use(bodyParser.json());
-
-app.use(session({
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: true,
-}));
-
+const PORT = process.env.PORT || 3000
 
 // MongoDB Connection
-mongoose.connect('mongodb+srv://CAP2023:CAP2023@capstone.l3wnows.mongodb.net/SUBDIV', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+const connectDB = async () => {
+    try {
+      const conn = await mongoose.connect(process.env.MONGO_URI);
+      console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+      console.log(error);
+      process.exit(1);
+    }
+  }
 
-const db = mongoose.connection;
-db.once('open', () => {
-    console.log('Connected to MongoDB');
-});
+  //Connect to the database before listening
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("listening for requests");
+    })
+})
+
 
 // User Schema
 const userSchema = new mongoose.Schema({
@@ -44,6 +40,20 @@ const userSchema = new mongoose.Schema({
     // Set versionKey to false to exclude the __v field
     versionKey: false
 });
+
+
+app.use('/public/', express.static('./public'));
+app.set('view engine', 'ejs');
+
+const session = require('express-session');
+
+app.use(bodyParser.json());
+
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+}));
 
 
 userSchema.methods.comparePassword = function(candidatePassword) {
@@ -259,9 +269,4 @@ app.post('/delete', async (req, res) => {
         console.error(error);
         res.send('Error deleting user account');
     }
-});
-
-// Start the server
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
 });
