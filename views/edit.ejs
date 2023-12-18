@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="public/css/edit-style.css">
+        <script>
+            function showAlert2() {
+                var firstNameInput = document.getElementById("newFirstName");
+                var lastNameInput = document.getElementById("newLastName");
+                var contactNoInput = document.getElementById("newContactNo");
+    
+                if (
+                    vehicleIdInput.value.trim() !== "" ||
+                    rfidIdInput.value.trim() !== "" ||
+                    firstNameInput.value.trim() !== "" ||
+                    lastNameInput.value.trim() !== "" ||
+                    contactNoInput.value.trim() !== ""
+                ) {
+                }
+            }
+        </script>
+                <script>
+                    function showAlert1() {
+                        var usernameInput = document.getElementById("newEmail");
+                        var passwordInput = document.getElementById("newPassword");
+            
+                        if (
+                            usernameInput.value.trim() !== "" ||
+                            passwordInput.value.trim() !== "" 
+                        ) {
+                        }
+                    }
+                </script>
+        <script>
+        function redirectToHome() {
+            window.location.href = "/home";
+        } 
+        </script>
+</head>
+<body style="background-color:rgb(15, 15, 15);">
+    <div class="bg-img">
+
+        <button style="position: fixed;
+        bottom: 300;
+        right: 300;
+        width: 250px;
+        border: 1px solid rgb(255, 255, 255);" 
+        type="button" onclick="redirectToHome()">Back to Home</button>
+
+        <div class="container">
+            <h1>User Profile</h1>
+            <form action="#">
+                <p>E-Mail: <%= user.email %></p>
+                <p>Password: <%= user.password %></p>
+                <p>First Name: <%= user.first_name %></p>
+                <p>Last Name: <%= user.last_name %></p>
+                <p>Contact Number: <%= user.contact_no %></p>        
+            </form>
+        </div>
+            <div class="container">
+                <h1>Edit Login Credentials</h1>
+                <form id= "editform" action="/editlogin" method="POST">
+                    <div class="form-group">
+                        <label for="newEmail">New E-mail</label>
+                        <input type="text" id="newEmail" name="newEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" name="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <p>Verification:</p>
+                        <label for="newPassword">Current Password</label>
+                        <input type="password" name="currentPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Save Changes</button>
+                        <div id="message" onclick="showAlert1"></div>
+                    </div>
+                </form>
+            </div>
+                <div class="container">
+                    <h1>Edit User Info</h1>
+                    <form action="/editinfo" method="POST">
+                        <div class="form-group">
+                            <label for="newFirstName">New First Name</label>
+                            <input type="text" id="newFirstName" name="newFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newLastName">New Last Name</label>
+                            <input type="text" id="newLastName" name="newLastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newContactNo">New Contact Number</label>
+                            <input type="text" id="newContactNo" name="newContactNo" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" onclick="showAlert2">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+        <div class="container">
+            <h1>Delete Account</h1>
+            <form action="/delete" method="POST">
+                <p>Are you sure you want to delete your account?</p>
+                <div class="form-group">
+                    <button type="submit" onclick="return confirm('This action cannot be undone. Are you sure you want to delete your account?')">Delete Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

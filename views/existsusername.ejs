@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Username Already Exists!</title>
+    <link rel="stylesheet" href="public/loginform2/style2.css">
+    <style>
+        body {
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+        font-family: 'Montserrat',sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-img">
+    <div class="content">
+        <p>E-mail already exists!</p>
+        <p>Please use a unique E-mail.</p>
+        <br>
+        <p>Redirecting you back after <span id="countdown">5</span> seconds...</p>
+    </div>
+    </div>
+    <script>
+        // Function to update the countdown timer
+        function updateCountdown(seconds) {
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.textContent = seconds;
+
+            if (seconds <= 0) {
+                // Redirect back to /edit when countdown reaches 0
+                window.location.href = '/register';
+            } else {
+                // Decrement the countdown and update after 1 second
+                setTimeout(() => {
+                    updateCountdown(seconds - 1);
+                }, 1000);
+            }
+        }
+
+        // Start the countdown when the page loads
+        window.onload = function () {
+            updateCountdown(5); // Start with a 5-second countdown
+        };
+    </script>
+</body>
